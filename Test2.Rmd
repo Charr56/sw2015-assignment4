@@ -1,0 +1,77 @@
+---
+title: "Agrarisch Kwartaalbericht"
+author: "Charlotte"
+date: "21-11-2019"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(zoo)
+library(forestmangr)
+library(ggplot2)
+library(readxl)
+library(plotly)
+library(webshot)
+```
+
+## Agrarisch Kwartaalbericht
+
+
+
+```{r, echo=FALSE}
+setwd("~/Kadaster - Agrarisch Kwartaalbericht")
+TestFiguur1 <- read_excel("TestFiguur1.xlsx")
+
+bron1oppervlakte <- TestFiguur1[c(0:6)]
+bron2keuzekoopsom <- TestFiguur1[c(9:14)]
+spreidingscijfers <- TestFiguur1[c(16:18)]
+
+summed <-rowSums(bron1oppervlakte[,c(3,4,5)])
+bron1oppervlakte <- cbind(bron1oppervlakte,summed)
+
+summed2 <-rowSums(bron2keuzekoopsom[,c(3,4,5)])
+bron2keuzekoopsom <- cbind(bron2keuzekoopsom,summed2)
+
+
+kwartalen <- paste(bron1oppervlakte$JAAR...1,bron1oppervlakte$KWARTAAL...2, sep = "-Q")
+bouwland <- rollsumr(bron2keuzekoopsom$AKKERLAND...11, k = 4, fill = NA) / (rollsumr(bron1oppervlakte$AKKERLAND...3, k = 4, fill = NA)/10000)
+maisland <- rollsumr(bron2keuzekoopsom$SNIJMAIS...13, k = 4, fill = NA) / (rollsumr(bron1oppervlakte$SNIJMAIS...5, k = 4, fill = NA)/10000)
+grasland <- rollsumr(bron2keuzekoopsom$GRASLAND...12, k = 4, fill = NA) / (rollsumr(bron1oppervlakte$GRASLAND...4, k = 4, fill = NA)/10000)
+summedtot <- rollsumr(bron2keuzekoopsom$summed2, k = 4, fill = NA) / (rollsumr(bron1oppervlakte$summed, k = 4, fill = NA)/10000)
+
+verwerking <- data.frame(kwartalen,bouwland,maisland,grasland,summedtot) #stop alles in een dataframe
+verwerking2 <- round_df(verwerking,digits=-2) #afronding
+verwerking2laatste12 <- tail(verwerking2,12)
+```
+
+## Figuur 1
+
+```{r plot grafiek, echo=FALSE}
+#plot grafiek met plotly
+p <- plot_ly(data = verwerking2laatste12, x = verwerking2laatste12$kwartalen, y = verwerking2laatste12$bouwland, name='bouwland', type='scatter',mode='lines+markers') %>%
+  layout(
+    yaxis = list(
+      range=c(30000,80000)
+    )
+  ) %>%
+  add_trace(y = verwerking2laatste12$maisland, name='maisland', mode= 'lines+markers') %>%
+  add_trace(y = verwerking2laatste12$grasland, name='grasland', mode= 'lines+markers') %>%
+  add_trace(y = verwerking2laatste12$summedtot, name='totaal', mode= 'lines+markers')
+p
+```
+
+```{r verwerking voor tabel, echo=FALSE}
+spreidingscijfersafgerond <- round_df(spreidingscijfers, digits=-2)
+verhandeldeoppervlakte <- round((bron1oppervlakte$summed / 10000),digits = 0)
+tabel <- cbind(kwartalen,verwerking2$summedtot,spreidingscijfersafgerond,verhandeldeoppervlakte)
+tabellaatste12 <- tail(tabel,12)
+```
+
+## Tabel 1
+
+```{r plot tabel}
+plot_ly(type="table",header=list(values=c('Jaar', 'Gemiddelde grondprijs (€/ha)', '25%', '50%', '75%','Verhandelde oppervlakte (ha)')), 
+                                 cells=list(values=unname(tabellaatste12)))

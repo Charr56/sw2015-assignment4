@@ -1,0 +1,56 @@
+- Hoe genereren jullie nu het plaatje? Hoe zijn die gebieden afgebakend? Coördinaten? Of vooral ingesteld? Statline heeft wel gegevens over deze gebieden
+- Waar komt die data met die percentages vandaan?
+- Waar komt die areaal data vandaan?
+- Halen jullie alleen een kwartaal aan data op, of gewoon alle data tot dan toe en halen jullie handmatig de data voor dat kwartaal eruit?
+- Waar kan ik de kwartaalberichten van eerdere kwartalen vinden? Verschillende provincies? Zodat ik de historie heb.
+
+~ Als er tijdens een kwartaal geen data is voor een bepaald gebied, dan wil je overal 0 invullen. Denk niet dat de code dat op dit moment doet.
+ plus, hoe groot is die kans?
+
+~ Het opslaan, eerst een kopie maken voor de zekerheid? Gewoon overschrijven? 
+
+~ Automatische kwartaal herkenning?
+
+~ Foutmeldingen: wanneer er data van meerdere kwartalen in staat, wanneer er in de historie al data bestaat voor dat kwartaal? Wil je deze dan overschrijven?
+
+friesland, noord-brabant
+-------
+
+gewogen statistische spreiding
+
+iedere verhandelde vierkante meter 1 waarneming:
+
+weight by oppervlakte
+
+-------
+emmen
+saab
+---
+automatische jaar/kwartaal herkenning
+statistische berekening
+Nu alleen Q1 2016 gedaan, misschien nu ook Q2-Q4 om te testen of het werkt 
+
+
+Data transformatie:
+
+- Opslag van data: overschrijven, of kopie?
+- Automatisch herkennen van datumc (jaar/kwartaal)
+- Tabel 1 (spreidingscijfers berekening krijg ik van PP)
+- Kaart 1 (coördinaten krijg ik van PP)
+- Grafiek 3 (verschil krijg ik van PP)
+- Tabel 3 (Areaal handmatig invoeren)
+- Grafiek 4  *
+- Tabel 4   *
+
+
+Data visualisatie:
+- generieke manier om die figuren te plotten 
+- plotly, hoe naar pdf om te zetten? in html lukt het ook niet om die figuren/tabellen achter elkaar te plotten.
+
+
+planning maken
+inhoudelijk overleg paul peter
+direct linken aan cbs data
+
+GRASLAND + GRASLAND EXTENSIEF?
+
